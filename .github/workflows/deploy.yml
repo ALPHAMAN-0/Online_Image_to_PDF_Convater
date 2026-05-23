@@ -1,0 +1,68 @@
+name: Deploy to GitHub Pages
+
+on:
+  # Deploy on every push to the main branch
+  push:
+    branches: [main]
+  # Allow manual runs from the Actions tab
+  workflow_dispatch:
+
+# Permissions required by actions/deploy-pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let new deploys queue behind in-flight ones (don't cancel a running deploy)
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build static export
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup GitHub Pages
+        id: pages
+        uses: actions/configure-pages@v5
+        with:
+          # Tells the action to inject env vars Next.js understands
+          static_site_generator: next
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build with Next.js
+        env:
+          # next.config.mjs reads this and sets it as `basePath`.
+          # For repo "user/foo", this becomes "/foo".
+          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # `output: "export"` in next.config.mjs writes the site here
+          path: ./out
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
