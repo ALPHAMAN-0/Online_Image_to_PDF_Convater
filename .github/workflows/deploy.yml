@@ -33,11 +33,12 @@ jobs:
           cache: npm
 
       - name: Setup GitHub Pages
-        id: pages
         uses: actions/configure-pages@v5
-        with:
-          # Tells the action to inject env vars Next.js understands
-          static_site_generator: next
+        # NOTE: we intentionally do NOT pass `static_site_generator: next`.
+        # That option asks the action to inject basePath / output / images
+        # settings into next.config — but our next.config.mjs already does
+        # all of that explicitly, so the two would fight. We just need this
+        # step to enable the Pages environment for the deploy job.
 
       - name: Install dependencies
         run: npm ci
