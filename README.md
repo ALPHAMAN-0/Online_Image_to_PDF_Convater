@@ -2,6 +2,18 @@
 
 A 100% client-side **Image to PDF Converter** built with **Next.js 14**, **TypeScript**, **Tailwind CSS**, and **shadcn/ui**. Convert JPG, PNG, WEBP, GIF, and BMP images into a single PDF — entirely in your browser. No uploads. No accounts. No cost.
 
+## Architecture / How it Works
+
+```mermaid
+flowchart LR
+    A[User] --> B[Online Image To Pdf Convater]
+    B --> C{Logic}
+    C --> D[(Data)]
+    C --> E[Output]
+    D --> C
+```
+
+
 > **Privacy first** — your images never leave your device. All decoding, EXIF correction, compression, and PDF generation happens locally in JavaScript.
 
 ---
