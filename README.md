@@ -5,12 +5,14 @@ A 100% client-side **Image to PDF Converter** built with **Next.js 14**, **TypeS
 ## Architecture / How it Works
 
 ```mermaid
-flowchart LR
-    A[User] --> B[Online Image To Pdf Convater]
-    B --> C{Logic}
-    C --> D[(Data)]
-    C --> E[Output]
-    D --> C
+flowchart TD
+    App_Router --> UI_Components
+    App_Router --> Hooks
+    UI_Components --> UI_Primitives
+    UI_Components --> Types
+    Hooks --> Lib
+    Lib --> Types
+    Deploy_Workflow --> App_Router
 ```
 
 
