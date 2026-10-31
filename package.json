@@ -4,9 +4,9 @@
   "private": true,
   "description": "100% client-side Image to PDF Converter built with Next.js 14, TypeScript, and Tailwind CSS.",
   "scripts": {
-    "dev": "node init && next dev",
-    "build": "node init && next build",
-    "start": "node init && next start",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit"
   },
